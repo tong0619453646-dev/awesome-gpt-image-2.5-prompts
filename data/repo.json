@@ -1,0 +1,43 @@
+{
+ "name": "awesome-gpt-image-2.5-prompts",
+ "curl": "export APIKO_API_KEY=\"your_key_here\"\n\nTASK_ID=$(curl -s https://api.apiko.app/v1/images/generations \\\n  -H \"Authorization: Bearer $APIKO_API_KEY\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n  \"model\": \"gpt-image-2.5-flare\",\n  \"prompt\": \"A minimalist poster of a paper boat on a calm lake at sunrise, the title \\\"Morning\\\" in bold serif type.\",\n  \"size\": \"16:9\",\n  \"resolution\": \"1k\",\n  \"quality\": \"medium\",\n  \"async\": true\n}' | python3 -c 'import json,sys; print(json.load(sys.stdin)[\"id\"])')\n\n# When status is \"completed\", the image is at data[0].url (kept for 24 hours).\nwhile :; do\n  TASK=$(curl -s https://api.apiko.app/v1/tasks/$TASK_ID \\\n    -H \"Authorization: Bearer $APIKO_API_KEY\")\n  printf '%s\\n' \"$TASK\"\n  printf '%s' \"$TASK\" | grep -qE '\"status\": *\"(completed|failed)\"|\"error\": *\\{' && break\n  sleep 5\ndone",
+ "endpoints": [
+  [
+   "POST",
+   "/v1/images/generations",
+   "create"
+  ],
+  [
+   "GET",
+   "/v1/tasks/{id}",
+   "poll"
+  ]
+ ],
+ "notices": true,
+ "siblings": [
+  [
+   "awesome-seedance-2.5-prompts",
+   "Awesome Seedance 2.5 Prompts"
+  ],
+  [
+   "awesome-gpt-image-2.6-prompts",
+   "Awesome GPT Image 2.6 Prompts"
+  ],
+  [
+   "awesome-nano-banana-2.1-prompts",
+   "Awesome Nano Banana 2.1 Prompts"
+  ],
+  [
+   "awesome-gpt-image-2-prompts",
+   "Awesome GPT Image 2 Prompts"
+  ],
+  [
+   "awesome-claude-opus-5.5-video-prompts",
+   "Awesome Claude Opus 5.5 Video Prompts"
+  ],
+  [
+   "awesome-wan-3.0-prompts",
+   "Awesome Wan 3.0 Prompts"
+  ]
+ ]
+}
